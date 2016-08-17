@@ -1,0 +1,22 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.android_places.fragments.MapFragment">
+    <FrameLayout
+        android:id="@+id/map_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@android:color/transparent" />
+    <ImageView
+        android:background="@drawable/border_background"
+        android:id="@+id/fragment_map_iv"
+        android:padding="@dimen/margin_4"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_alignParentBottom="true"
+        android:src="@drawable/maps"
+        android:layout_margin="@dimen/activity_horizontal_margin"
+        />
+
+</RelativeLayout>

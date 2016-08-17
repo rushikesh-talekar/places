@@ -1,0 +1,56 @@
+<LinearLayout  xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:background="@drawable/maps">
+
+    <android.support.v7.widget.CardView
+        android:id="@+id/fragment_search_card_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/activity_horizontal_margin"
+        tools:context="com.example.android_places.fragments.SearchLocFragment"
+        android:elevation="@dimen/margin_4"
+        android:foreground="?android:attr/selectableItemBackground"
+        android:clickable="true">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <com.example.android_places.utils.RegularTextView
+                android:id="@+id/fragment_search_pick_location"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_4"
+                android:layout_centerHorizontal="true"
+                android:textColor="@color/colorGreen"
+                android:text="@string/pick_location"/>
+            <com.example.android_places.utils.RegularTextView
+                android:id="@+id/fragment_search__location"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/margin_8"
+                android:layout_marginRight="@dimen/margin_8"
+                android:layout_marginTop="@dimen/margin_4"
+                android:layout_marginBottom="@dimen/margin_4"
+                android:gravity="center_horizontal"
+                android:layout_below="@id/fragment_search_pick_location"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:textColor="@android:color/black"
+                android:text="@string/select_location"
+                android:textSize="20sp"/>
+        </RelativeLayout>
+
+    </android.support.v7.widget.CardView>
+    <Button
+        android:id="@+id/fragment_search__btn_proceed"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/activity_horizontal_margin"
+        android:textColor="@android:color/white"
+        android:background="@color/colorPrimary"
+        android:elevation="@dimen/margin_4"
+        android:text="@string/proceed"/>
+
+</LinearLayout>
