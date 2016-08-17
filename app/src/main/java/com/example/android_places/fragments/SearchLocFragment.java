@@ -38,7 +38,7 @@ public class SearchLocFragment extends Fragment implements View.OnClickListener 
     private Activity mActivity;
     private TextView tvLocation;
     private Button btnProceed;
-    private Place place;
+    private Place place = null;
 
     public static SearchLocFragment newInstance() {
         SearchLocFragment fragment = new SearchLocFragment();
@@ -66,6 +66,7 @@ public class SearchLocFragment extends Fragment implements View.OnClickListener 
     }
 
     private void initView(View v) {
+        place = null;
         mActivity = getActivity();
         cvSelectLoc = (CardView)v.findViewById(R.id.fragment_search_card_view);
         tvLocation = (TextView)v.findViewById(R.id.fragment_search__location);
