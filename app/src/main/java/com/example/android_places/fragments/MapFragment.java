@@ -8,9 +8,12 @@ import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +21,7 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.example.android_places.R;
+import com.example.android_places.adapter.PhotosListAdapter;
 import com.example.android_places.utils.AttributedPhoto;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.places.Place;
@@ -39,7 +43,7 @@ import java.util.ArrayList;
 import java.util.Random;
 import java.util.concurrent.ExecutionException;
 
-public class MapFragment extends Fragment implements OnMapReadyCallback, View.OnClickListener {
+public class MapFragment extends Fragment implements OnMapReadyCallback {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String PLACE = "place_id";
@@ -49,8 +53,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, View.On
     private String placeId;
     private Activity mActivity;
     private Place place;
-    private ImageView ivPhotos;
-    private Bitmap mBitmap;
+    private RecyclerView recyclerView;
 
 
     public MapFragment() {
@@ -73,17 +76,11 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, View.On
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_map, container, false);
         initView(v);
-        setListners();
         return v;
-    }
-
-    private void setListners() {
-        ivPhotos.setOnClickListener(this);
     }
 
     private void initView(View v) {
         mActivity = getActivity();
-        ivPhotos = (ImageView)v.findViewById(R.id.fragment_map_iv);
         SupportMapFragment mSupportMapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map_container);
         if (mSupportMapFragment == null) {
             FragmentManager fragmentManager = getFragmentManager();
@@ -92,6 +89,13 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, View.On
             fragmentTransaction.replace(R.id.map_container, mSupportMapFragment).commit();
             mSupportMapFragment.getMapAsync(this);
         }
+
+        // Photos List
+
+        recyclerView = (RecyclerView)v.findViewById(R.id.fragment_map_list);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(mActivity);
+        layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
+        recyclerView.setLayoutManager(layoutManager);
     }
 
     @Override
@@ -109,7 +113,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, View.On
         final String placeId = place.getId(); // Australian Cruise Group
 
         // Create a new AsyncTask that displays the bitmap and attribution once loaded.
-        PhotoTask task = new PhotoTask(mActivity,ivPhotos.getWidth(), ivPhotos.getHeight());
+        PhotoTask task = new PhotoTask(mActivity,100, 100);
         task.execute(placeId);
     }
 
@@ -123,21 +127,9 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, View.On
 
     }
 
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.fragment_map_iv:
-              saveImage(mBitmap);
-        }
-    }
-
     private void saveImage(Bitmap finalBitmap) {
         Boolean isSDPresent = android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED);
         if(isSDPresent) {
-            ProgressDialog dialog = new ProgressDialog(mActivity);
-            dialog.setTitle(mActivity.getResources().getString(R.string.save_img));
-            dialog.setCancelable(false);
-            dialog.show();
             String root = Environment.getExternalStorageDirectory().toString();
             File myDir = new File(root);
             myDir.mkdirs();
@@ -152,13 +144,9 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, View.On
                 finalBitmap.compress(Bitmap.CompressFormat.JPEG, 90, out);
                 out.flush();
                 out.close();
-
+                Toast.makeText(mActivity,mActivity.getResources().getString(R.string.img_saved),Toast.LENGTH_LONG).show();
             } catch (Exception e) {
                 e.printStackTrace();
-            }
-            finally {
-                if (dialog != null && dialog.isShowing())
-                    dialog.dismiss();
             }
         } else {
             Toast.makeText(mActivity,mActivity.getResources().getString(R.string.sdcard_error),Toast.LENGTH_LONG).show();
@@ -238,9 +226,24 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, View.On
                 dialog.dismiss();
             mGoogleApiClient.disconnect();
             if(!list.isEmpty()) {
-                mBitmap = list.get(0).bitmap;
-                ivPhotos.setImageBitmap(mBitmap);
+                addAdapter(list);
             }
         }
+    }
+
+    private void addAdapter(ArrayList<AttributedPhoto> list) {
+        //Snakbar to guide user
+        Snackbar snackbar = Snackbar
+                .make(mActivity.findViewById(android.R.id.content), mActivity.getResources().getString(R.string.snakbar_text), Snackbar.LENGTH_LONG);
+
+        snackbar.show();
+
+        PhotosListAdapter photosListAdapter = new PhotosListAdapter(new PhotosListAdapter.OnItemClickListner() {
+            @Override
+            public void onItemClicked(AttributedPhoto attributedPhoto) {
+                saveImage(attributedPhoto.bitmap);
+            }
+        },mActivity,list);
+        recyclerView.setAdapter(photosListAdapter);
     }
 }

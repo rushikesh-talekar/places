@@ -8,15 +8,14 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@android:color/transparent" />
-    <ImageView
-        android:background="@drawable/border_background"
-        android:id="@+id/fragment_map_iv"
-        android:padding="@dimen/margin_4"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/fragment_map_list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:src="@drawable/maps"
-        android:layout_margin="@dimen/activity_horizontal_margin"
-        />
+        android:layout_marginBottom="@dimen/margin_8"
+        android:background="@android:color/transparent">
+
+    </android.support.v7.widget.RecyclerView>
 
 </RelativeLayout>

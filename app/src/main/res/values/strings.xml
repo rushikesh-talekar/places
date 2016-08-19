@@ -10,5 +10,7 @@
     <string name="sdcard_error">Unable to locate SDcard, Please check if SDCard is inserted</string>
     <string name="save_img">Saving image...</string>
     <string name="permission_error">Some functinalities may not work as permissions are not granted</string>
+    <string name="snakbar_text">Click on photo to save it on SdCard</string>
+    <string name="img_saved">Image saved</string>
 
 </resources>
